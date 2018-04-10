@@ -74,7 +74,9 @@ def insert_sort(li):
 #print(li)
 
 
-
+'''
+快速排序
+'''
 def partition(li, left, right):
     """
     归位第一个元素
@@ -114,18 +116,73 @@ def quick_sort(li):
 # print(li)
 
 
+'''
+堆排序
+'''
+def sift(li, left, right):  #调整成堆的过程是调整一个个子树和树，left和right表示树的范围
+    i = left
+    j = 2 * i + 1 # 找左孩子
+    tmp = li[left] # 把堆顶保存起来
+    while j <= right:
+        if j+1 <= right and li[j] < li[j+1]:
+            j = j + 1
+        if tmp < li[j]:
+            li[i] = li[j]
+            i = j
+            j = 2 * i + 1
+        else:
+            break
+    li[i] = tmp
+
+@cal_time
+def heap_sort(li):
+    n = len(li)
+    for i in range(n//2-1, -1, -1): #建立堆（从最后一个非叶子节点开始调整，为什么是到-1，因为0那个节点，也就是省长那个位置，也是要调整的）
+        sift(li, i, n-1) # 对于每一颗子树都去找它的right太麻烦了，直接就规定right为最下层的最右节点
+    for i in range(n-1, -1, -1):    #挨个出堆顶的省长
+        li[0], li[i] = li[i], li[0] # 不用生成新列表，把省长append进去，直接把强行推上省长的民的位置(也就是i)给退下来的省长，省空间
+        sift(li, 0, i-1) # i的位置已经不是堆的部分了，是退休领导的地方
+
+li = [6, 8, 1, 9, 3, 0, 7, 2, 4, 5]
+heap_sort(li)
+print(li)
+
+
+'''
+系统的sort
+'''
+@cal_time
+def sys_sort(li):
+    """
+    原装的sort
+    系统的这个最快，因为它是C语言写的
+    """
+    li.sort()
+
+# li = [10,4,6,3,8,2,5,7]
+# merge_sort(li,0,len(li)-1)
+
 # 冒泡和快排对比
-li = list(range(10000))
-random.shuffle(li)
-li1 = copy.deepcopy(li)
-li2 = copy.deepcopy(li)
-bubble_sort(li1)
-quick_sort(li2)
+# li = list(range(10000))
+# random.shuffle(li)
+# li1 = copy.deepcopy(li)
+# li2 = copy.deepcopy(li)
+# bubble_sort(li1)
+# quick_sort(li2)
 
 #快排最差情况
-sys.setrecursionlimit(1000000) #设置递归深度
-lix = list(range(1000, 1, -1))
-quick_sort(lix)
+# sys.setrecursionlimit(1000000) #设置递归深度
+# lix = list(range(1000, 1, -1))
+# quick_sort(lix)
 
-
+# 快排、堆排序、归并排序、原装的排序
+# li = [random.randint(0, 100) for i in range(10000000)]
+# li1 = copy.deepcopy(li)
+# li2 = copy.deepcopy(li)
+# li3 = copy.deepcopy(li)
+#
+# sys_sort(li1)
+# heap_sort(li1)
+# quick_sort(li2)
+# merge_sort(li3)
 
